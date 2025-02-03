@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    align-items: center;
+    background-color: rgb(155, 185, 254);
+}
+.logo {
+    margin-right: 10px;
+}
+nav{
+    background-color: rgb(247, 244, 147);
+}
+body{
+    background-color:rgb(246, 223, 210);
+    padding: 5px;
+}
+.sch img{
+    height: 30px;
+    margin-right: 10px;
+}
+.sch p{
+    display: flex;
+    margin-right: 625px;
+}
