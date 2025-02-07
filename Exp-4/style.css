@@ -1,0 +1,26 @@
+img{
+    height: 150px;
+    border-radius: 80%;
+    padding: 20px;
+}
+.bar{
+    display: flex;
+    background-color: rgb(21, 21, 21);
+    color: white;
+    border-radius: 90px;
+}
+.bar h1, h4{
+    margin-left: 30px;
+    margin-top: 25px;
+}
+body{
+    padding: 10px;
+}
+.container{
+    display: flex;
+    padding-left: 50px;
+    padding-top: 30px;
+}
+nav{
+    width: 20%;
+}
