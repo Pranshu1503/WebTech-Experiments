@@ -1,26 +1,54 @@
-img{
+img {
     height: 150px;
     border-radius: 80%;
     padding: 20px;
 }
-.bar{
+
+.bar {
     display: flex;
+    align-items: center;
     background-color: rgb(21, 21, 21);
     color: white;
     border-radius: 90px;
+    padding: 10px 20px;
 }
-.bar h1, h4{
-    margin-left: 30px;
-    margin-top: 25px;
+
+.bar h1, .bar h4 {
+    margin: 0 10px;
 }
-body{
+
+body {
     padding: 10px;
 }
-.container{
+
+.container {
     display: flex;
-    padding-left: 50px;
-    padding-top: 30px;
 }
-nav{
+
+nav {
     width: 20%;
+    padding-right: 20px; 
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.content-frame {
+    flex-grow: 1; 
+    border: none; 
+}
+.list{
+    padding-left: 100px;
+}
+.list a{
+    display: block; 
+    padding: 8px 0; 
+    color: black;
+    font-size: x-large;
 }
