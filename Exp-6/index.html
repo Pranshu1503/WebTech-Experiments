@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <link rel="stylesheet" href="Style.css">
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
+  <style>
+    /* styling for the preview section */
+    #preview {
+      margin: 100px;
+      padding: 20px;
+      border: 10px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    #preview table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #preview table, #preview th, #preview td {
+      border: 1px solid #ddd;
+    }
+    #preview th, #preview td {
+      padding: 8px;
+      text-align: left;
+    }
+    #preview th {
+      background-color: #f2f2f2;
+    }
+    #preview button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #preview button:hover {
+      background-color: #3a813d;
+    }
+    .star {
+      cursor: pointer;
+      font-size: 2em;
+      color: #ccc;
+    }
+    .star.selected, .star.hover {
+      color: #f39c12;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="title">Feedback Form</div>
+  <div class="form">
+    <div class="inputfield">
+      <label for="txtfname">First Name</label>
+      <input type="text" id="txtfname" class="input" required>
+    </div>  
+    <div class="inputfield">
+      <label for="txtlname">Last Name</label>
+      <input type="text" id="txtlname" class="input" required>
+    </div> 
+    <div class="inputfield">
+      <label for="sel">Gender</label>
+      <div class="custom_select">
+        <select id="sel" required>
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+    </div> 
+    <div class="inputfield">
+      <label for="mail">Email Address</label>
+      <input type="email" id="mail" class="input" required>
+    </div> 
+    <div class="inputfield">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" class="input" required pattern="[0-9]{10}">
+    </div> 
+    <div class="inputfield">
+      <label for="add">Address</label>
+      <textarea id="add" class="textarea" required></textarea>
+    </div> 
+    <div class="inputfield">
+      <label>Rating</label>
+      <div class="rating" role="radiogroup">
+        <span class="star" data-value="5" role="radio" aria-checked="false">★</span>
+        <span class="star" data-value="4" role="radio" aria-checked="false">★</span>
+        <span class="star" data-value="3" role="radio" aria-checked="false">★</span>
+        <span class="star" data-value="2" role="radio" aria-checked="false">★</span>
+        <span class="star" data-value="1" role="radio" aria-checked="false">★</span>
+        <input type="hidden" id="rating" name="rating" required>
+      </div>
+    </div>
+    <div class="inputfield">
+      <label for="feed">Feedback</label>
+      <textarea id="feed" class="textarea" required></textarea>
+    </div>  
+    <div class="inputfield">
+      <label for="photo">Upload Photo</label>
+      <input type="file" id="photo" accept="image/*">
+    </div>
+    <img id="photoPreview" src="" alt="Uploaded Photo" style="max-width: 100px; display: none; margin-top: 10px;">    
+    <div class="inputfield terms">
+    </div> 
+    <div class="inputfield">
+      <input type="submit" value="Register" id="bton" class="btn" onclick="sendEmail(event)">
+    </div>
+  </div>
+</div>  
+
+<!-- Preview section -->
+<div id="preview" style="display:none;">
+  <h2>Preview of Submitted Details</h2>
+  <div id="previewContent"></div>
+  <button onclick="confirmSubmission()">Confirm and Send</button>
+</div>
+<div id="preview" style="display:none;">
+  <h2>Preview of Submitted Details</h2>
+  <div id="previewContent"></div>
+  <img id="previewImage" src="" alt="Uploaded Photo" style="max-width: 100px; display: none; margin-top: 10px;">
+  <button onclick="confirmSubmission()">Confirm and Send</button>
+</div>
+
+<script> // for Rating 
+ document.addEventListener('DOMContentLoaded', () => {
+  const stars = document.querySelectorAll('.star');
+  const ratingInput = document.getElementById('rating');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const value = parseInt(star.getAttribute('data-value'));
+      ratingInput.value = value;
+      stars.forEach(s => s.classList.remove('selected'));
+
+      stars.forEach(s => {
+        if (parseInt(s.getAttribute('data-value')) <= value) {
+          s.classList.add('selected');
+        }
+      });
+    });
+
+    star.addEventListener('mouseover', () => {
+      const value = parseInt(star.getAttribute('data-value'));
+      stars.forEach(s => s.classList.remove('hover'));
+
+      stars.forEach(s => {
+        if (parseInt(s.getAttribute('data-value')) <= value) {
+          s.classList.add('hover');
+        }
+      });
+    });
+
+    star.addEventListener('mouseout', () => {
+      stars.forEach(s => s.classList.remove('hover'));
+    });
+  });
+});
+
+</script>
+<script>
+function sendEmail(event) {
+  event.preventDefault(); // Prevent form submission
+
+  var fname = document.getElementById('txtfname').value;
+  var lname = document.getElementById('txtlname').value;
+  var gsel = document.getElementById('sel').value;
+  var email = document.getElementById('mail').value;
+  var ph = document.getElementById('phone').value;
+  var addre = document.getElementById('add').value;
+  var rat = document.getElementById('rating').value;
+  var fead = document.getElementById('feed').value;
+
+  var body = "<table><tr><th>First Name</th><td>" + fname + "</td></tr><tr><th>Last Name</th><td>" + lname + "</td></tr><tr><th>Gender</th><td>" + gsel + "</td></tr><tr><th>E-mail</th><td>" + email + "</td></tr><tr><th>Phone Number</th><td>" + ph + "</td></tr><tr><th>Address</th><td>" + addre + "</td></tr><tr><th>Rating</th><td>" + rat + "</td></tr><tr><th>Feedback</th><td>" + fead + "</td></tr></table>";
+
+  // Display preview
+  document.getElementById('previewContent').innerHTML = body;
+  document.getElementById('preview').style.display = 'block';
+}
+
+function confirmSubmission() {
+  var fname = document.getElementById('txtfname').value;
+  var lname = document.getElementById('txtlname').value;
+  var gsel = document.getElementById('sel').value;
+  var email = document.getElementById('mail').value;
+  var ph = document.getElementById('phone').value;
+  var addre = document.getElementById('add').value;
+  var rat = document.getElementById('rating').value;
+  var fead = document.getElementById('feed').value;
+
+  var body = "<table border='1'><tr><td>First Name</td><td>" + fname + "</td></tr><tr><td>Last Name</td><td>" + lname + "</td></tr><tr><td>Gender</td><td>" + gsel + "</td></tr><tr><td>E-mail</td><td>" + email + "</td></tr><tr><td>Phone Number</td><td>" + ph + "</td></tr><tr><td>Address</td><td>" + addre + "</td></tr><tr><td>Rating</td><td>" + rat + "</td></tr><tr><td>Feedback</td><td>" + fead + "</td></tr></table>";
+
+  Email.send({
+    Host: "smtp.elasticemail.com",
+    Username: "samplecs50@gmail.com",
+    Password: "Password of sample CS50",
+    To: 'shoot.the.breeze14@gmail.com',
+    From: "samplecs50@gmail.com",
+    Subject: "Message from Feedback Form",
+    Body: body
+  }).then(
+    message => alert(message)
+  );
+}
+document.getElementById('photo').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('photoPreview').src = e.target.result;
+      document.getElementById('photoPreview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+function sendEmail(event) {
+  event.preventDefault(); // Prevent form submission
+
+  var fname = document.getElementById('txtfname').value;
+  var lname = document.getElementById('txtlname').value;
+  var gsel = document.getElementById('sel').value;
+  var email = document.getElementById('mail').value;
+  var ph = document.getElementById('phone').value;
+  var addre = document.getElementById('add').value;
+  var rat = document.getElementById('rating').value;
+  var fead = document.getElementById('feed').value;
+  var photoSrc = document.getElementById('photoPreview').src;
+
+  var body = `<table>
+                <tr><th>First Name</th><td>${fname}</td></tr>
+                <tr><th>Last Name</th><td>${lname}</td></tr>
+                <tr><th>Gender</th><td>${gsel}</td></tr>
+                <tr><th>E-mail</th><td>${email}</td></tr>
+                <tr><th>Phone Number</th><td>${ph}</td></tr>
+                <tr><th>Address</th><td>${addre}</td></tr>
+                <tr><th>Rating</th><td>${rat}</td></tr>
+                <tr><th>Feedback</th><td>${fead}</td></tr>
+              </table>`;
+
+  // Update the preview content
+  document.getElementById('previewContent').innerHTML = body;
+
+  if (photoSrc) {
+    document.getElementById('previewImage').src = photoSrc;
+    document.getElementById('previewImage').style.display = 'block';
+  }
+
+  document.getElementById('preview').style.display = 'block';
+}
+
+</script>
+
+</body>
+</html>
